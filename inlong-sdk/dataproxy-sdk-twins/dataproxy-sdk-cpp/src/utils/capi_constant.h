@@ -85,6 +85,11 @@ static const uint32_t kRetryIntervalMs= 200;
 static const int32_t kRetryTimes = 1;
 static const uint32_t kProxyRepeatTimes = 1;
 
+// HTTP report parameters
+static const bool kEnableHttpReport = false;
+static const char kHttpReportUrl[] = "http://127.0.0.1:46802/dataproxy/message";
+static const uint32_t kHttpReportTimeout = 10000;
+
 static const char kSerIP[] = "127.0.0.1";
 static const uint32_t kSerPort = 46801;
 static const uint32_t kMsgType = 7;

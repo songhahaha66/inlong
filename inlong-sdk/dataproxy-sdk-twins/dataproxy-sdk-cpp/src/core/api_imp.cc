@@ -18,6 +18,8 @@
 #include "api_imp.h"
 #include <signal.h>
 #include <iostream>
+#include <memory>
+#include "../client/http_client.h"
 #include "../manager/proxy_manager.h"
 #include "../manager/metric_manager.h"
 #include "../utils/capi_constant.h"
@@ -87,6 +89,11 @@ int32_t ApiImp::SendBase(const std::string& inlong_group_id, const std::string& 
     return check_ret;
   }
 
+  // Use HTTP client if HTTP reporting is enabled
+  if (SdkConfig::getInstance()->enable_http_report_ && http_client_) {
+    return http_client_->Send(inlong_group_id, inlong_stream_id, msg);
+  }
+
   ProxyManager::GetInstance()->CheckGroupIdConf(inlong_group_id, true);
 
   auto recv_group = recv_manager_->GetRecvGroup(inlong_group_id);
@@ -113,6 +120,17 @@ int32_t ApiImp::DoInit() {
 
   ProxyManager::GetInstance()->Init();
   MetricManager::GetInstance()->Init();
+
+  // Initialize HTTP client if HTTP reporting is enabled
+  if (SdkConfig::getInstance()->enable_http_report_) {
+    http_client_ = std::make_shared<HttpClient>(
+        SdkConfig::getInstance()->http_report_url_,
+        SdkConfig::getInstance()->http_report_timeout_);
+    if (!http_client_->Init()) {
+      LOG_ERROR("Failed to initialize HTTP client");
+      return SdkCode::kErrorInit;
+    }
+  }
 
   for (int i = 0; i < SdkConfig::getInstance()->inlong_group_ids_.size(); i++) {
     LOG_INFO("Do init:" << SdkConfig::getInstance()->inlong_group_ids_[i]);

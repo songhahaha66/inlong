@@ -23,6 +23,9 @@
     "log_size": 104857600,
     "log_level": 3,
     "log_path": "./",
+    "enable_http_report": false,
+    "http_report_url": "http://127.0.0.1:46802/dataproxy/message",
+    "http_report_timeout": 10000,
     "need_auth": false,
     "auth_id": "",
     "auth_key": ""

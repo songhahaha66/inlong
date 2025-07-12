@@ -70,6 +70,7 @@ bool SdkConfig::ParseConfig(const std::string &config_path) {
   InitLogParam(doc);
   InitManagerParam(doc);
   InitTcpParam(doc);
+  InitHttpParam(doc);
 
   std::string err, local_ip;
   if (GetLocalIPV4Address(err, local_ip)) {
@@ -140,6 +141,11 @@ void SdkConfig::defaultInit() {
   max_instance_ = constants::kMaxInstance;
   instance_num_ = 1;
   enable_share_msg_ = constants::kEnableShareMsg;
+
+  // HTTP report parameters
+  enable_http_report_ = constants::kEnableHttpReport;
+  http_report_url_ = constants::kHttpReportUrl;
+  http_report_timeout_ = constants::kHttpReportTimeout;
 }
 
 void SdkConfig::InitThreadParam(const rapidjson::Value &doc) {
@@ -433,6 +439,34 @@ void SdkConfig::InitTcpParam(const rapidjson::Value &doc) {
     proxy_repeat_times_ = constants::kProxyRepeatTimes;
   }
 }
+
+void SdkConfig::InitHttpParam(const rapidjson::Value &doc) {
+  // enable_http_report
+  if (doc.HasMember("enable_http_report") && doc["enable_http_report"].IsBool()) {
+    const rapidjson::Value &obj = doc["enable_http_report"];
+    enable_http_report_ = obj.GetBool();
+  } else {
+    enable_http_report_ = constants::kEnableHttpReport;
+  }
+
+  // http_report_url
+  if (doc.HasMember("http_report_url") && doc["http_report_url"].IsString()) {
+    const rapidjson::Value &obj = doc["http_report_url"];
+    http_report_url_ = obj.GetString();
+  } else {
+    http_report_url_ = constants::kHttpReportUrl;
+  }
+
+  // http_report_timeout
+  if (doc.HasMember("http_report_timeout") && doc["http_report_timeout"].IsInt() &&
+      doc["http_report_timeout"].GetInt() > 0) {
+    const rapidjson::Value &obj = doc["http_report_timeout"];
+    http_report_timeout_ = obj.GetInt();
+  } else {
+    http_report_timeout_ = constants::kHttpReportTimeout;
+  }
+}
+
 void SdkConfig::InitAuthParm(const rapidjson::Value &doc) {
   // auth settings
   if (doc.HasMember("need_auth") && doc["need_auth"].IsBool() &&
@@ -584,6 +618,9 @@ void SdkConfig::ShowClientConfig() {
   LOG_INFO("max_tcp_num: " << max_proxy_num_);
   LOG_INFO("msg_type: " << msg_type_);
   LOG_INFO("enable_tcp_nagle: " << enable_tcp_nagle_ ? "true" : "false");
+  LOG_INFO("enable_http_report: " << enable_http_report_ ? "true" : "false");
+  LOG_INFO("http_report_url: " << http_report_url_.c_str());
+  LOG_INFO("http_report_timeout: " << http_report_timeout_);
   LOG_INFO("enable_setaffinity: " << enable_setaffinity_ ? "true" : "false");
   LOG_INFO("mask_cpuaffinity: " << mask_cpu_affinity_);
   LOG_INFO("extend_field: " << extend_field_);

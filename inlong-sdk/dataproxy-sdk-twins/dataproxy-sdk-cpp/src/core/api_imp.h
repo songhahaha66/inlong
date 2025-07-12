@@ -23,6 +23,7 @@
 #include "../config/sdk_conf.h"
 #include "../manager/recv_manager.h"
 #include "../manager/send_manager.h"
+#include "../client/http_client.h"
 #include "../utils/atomic.h"
 
 namespace inlong {
@@ -62,6 +63,9 @@ class ApiImp {
 
   std::shared_ptr<RecvManager> recv_manager_;
   std::shared_ptr<SendManager> send_manager_;
+  
+  // HTTP client for HTTP reporting
+  std::shared_ptr<class HttpClient> http_client_;
 };
 
 }  // namespace inlong

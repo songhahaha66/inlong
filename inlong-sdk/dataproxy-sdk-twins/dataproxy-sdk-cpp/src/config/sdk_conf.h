@@ -39,6 +39,7 @@ private:
   void InitLogParam(const rapidjson::Value &doc);
   void InitManagerParam(const rapidjson::Value &doc);
   void InitTcpParam(const rapidjson::Value &doc);
+  void InitHttpParam(const rapidjson::Value &doc);
   void InitAuthParm(const rapidjson::Value &doc);
   void OthersParam(const rapidjson::Value &doc);
   bool GetLocalIPV4Address(std::string& err_info, std::string& localhost);
@@ -97,6 +98,11 @@ private:
   bool enable_local_cache_;
   uint32_t retry_times_;
   uint32_t proxy_repeat_times_;
+
+  // HTTP report parameters
+  bool enable_http_report_;
+  std::string http_report_url_;
+  uint32_t http_report_timeout_;
 
   // auth settings
   bool need_auth_;

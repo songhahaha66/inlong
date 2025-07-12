@@ -125,9 +125,35 @@ Follow these steps to use the DataProxy Python SDK:
 
 4. **Function return values**: The functions mentioned above return 0 if they are successful, and a non-zero value indicates failure. Make sure to check the return values to ensure proper execution.
 
+## HTTP Reporting Support
+
+The DataProxy SDK now supports HTTP reporting in addition to the traditional TCP/UDP protocols. To enable HTTP reporting:
+
+1. **Configure HTTP reporting**: Set the following parameters in your configuration JSON file:
+   ```json
+   {
+     "init-param": {
+       "enable_http_report": true,
+       "http_report_url": "http://your-dataproxy-host:46802/dataproxy/message",
+       "http_report_timeout": 10000
+     }
+   }
+   ```
+
+2. **Configuration parameters**:
+   - `enable_http_report`: Set to `true` to enable HTTP reporting
+   - `http_report_url`: The HTTP endpoint URL for DataProxy
+   - `http_report_timeout`: Timeout for HTTP requests in milliseconds
+
+3. **Usage**: Once HTTP reporting is enabled, the SDK will automatically use HTTP for data transmission instead of TCP/UDP. The API usage remains the same.
+
+4. **HTTP Demo**: You can refer to the `/demo/send_http_demo.py` file for a complete example of using HTTP reporting.
+
 ## Demo
 
-You can refer to the `/demo/send_demo.py` file. To run this demo, you first need to ensure that the SDK has been built and installed properly. Then, follow these steps:
+You can refer to the `/demo/send_demo.py` file for TCP/UDP data sending, or `/demo/send_http_demo.py` for HTTP data sending. To run these demos, you first need to ensure that the SDK has been built and installed properly. Then, follow these steps:
+
+### TCP/UDP Demo
 
 1. Navigate to the `demo` directory in your terminal or command prompt.
 2. Modify the configuration settings in `config_example.json` as needed to match your specific use case.
@@ -135,4 +161,13 @@ You can refer to the `/demo/send_demo.py` file. To run this demo, you first need
 
    ```bash
    python send_demo.py config_example.json [inlong_group_id] [inlong_stream_id]
+   ```
+
+### HTTP Demo
+
+1. Navigate to the `demo` directory in your terminal or command prompt.
+2. Run the HTTP demo directly (it will create its own configuration with HTTP enabled):
+
+   ```bash
+   python send_http_demo.py
    ```
