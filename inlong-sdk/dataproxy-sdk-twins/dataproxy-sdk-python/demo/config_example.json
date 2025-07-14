@@ -25,6 +25,8 @@
     "log_path": "./",
     "need_auth": false,
     "auth_id": "",
-    "auth_key": ""
+    "auth_key": "",
+    "http_report_url": "http://dataproxy_url:46802/dataproxy/message",
+    "http_report_timeout": 10000
   }
 }

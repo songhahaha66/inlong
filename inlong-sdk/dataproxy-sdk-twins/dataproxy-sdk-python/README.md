@@ -91,6 +91,8 @@ Refer to `demo/config_example.json`.
 | need_auth                | false                                                              | whether need authentication while interacting with manager                                                 |
 | auth_id                  | ""                                                                 | authenticate id if need authentication                                                                     |
 | auth_key                 | ""                                                                 | authenticate key if need authentication                                                                    |
+| http_report_url          | "http://dataproxy:8080/dataproxy/message"                                                                 | HTTP endpoint URL for HTTP SDK                          |
+| http_report_timeout      | 10000                                                              | HTTP request timeout in milliseconds for HTTP SDK                                                         |
 
 ## Usage
 
@@ -136,3 +138,13 @@ You can refer to the `/demo/send_demo.py` file. To run this demo, you first need
    ```bash
    python send_demo.py config_example.json [inlong_group_id] [inlong_stream_id]
    ```
+
+### HTTP SDK Demo
+
+For the HTTP-only version, you can use `/demo/http_simple_demo.py`:
+
+1. Install the requests library: `pip install -r requirements.txt`
+2. Add `http_report_url` to your `config_example.json`
+3. Run: `python http_simple_demo.py`
+
+This provides the same API as the C++ SDK but uses HTTP transport.
